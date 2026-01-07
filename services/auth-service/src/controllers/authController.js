@@ -6,17 +6,17 @@ exports.login = async(req, res)=>{
     const token = jwt.sign(
         {email},
         process.env.JWT_SECRET,
-        {expiresIn: '1h'}
+        {expiresIn: '2min'}
     );
     res.json({ token });
 };
 
 exports.verifyToken = (req, res)=>{
-    const token = req.headers.authorization?.split('')[1];
+    const token = req.headers.authorization?.split(' ')[1];
     if(!token) return res.status(401).json({message: 'No token'});
 
     try{
-        const decoded = jwt.verify(process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         res.json({valid: true, user: decoded})
     }catch{
         res.status(401).json({valid: false});

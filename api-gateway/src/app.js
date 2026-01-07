@@ -1,12 +1,15 @@
 const express = require('express');
 const app = express();
+
+const authRoutes = require('./routes/authRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 
 app.use(express.json());
-app.use('/orders', orderRoutes)
+app.use('/auth', authRoutes);
+app.use('/orders', orderRoutes);
 
 app.get('/health', (req, res) =>{
-    res.json({status: 'Order service is healthy'});
+    res.json({status: 'API Gateway is healthy'});
 });
 
 module.exports = app;
