@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post('/login', async (req, res) => {
     try {
-        const response = await axios.post('http://localhost:4001/auth/login', req.body);
+        const response = await axios.post('http://auth-service:4001/auth/login', req.body);
         res.json(response.data);
     } catch (error) {
         res.status(500).json({ message: 'Auth service error' });
