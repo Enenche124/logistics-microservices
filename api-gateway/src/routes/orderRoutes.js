@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/orders', verifyAuth, async (req, res) => {
     try {
-        const response = await axios.post('http://order-service:4002/v1/orders', req.body
+        const response = await axios.post('http://localhost:4002/v1/orders', req.body
             , {
              headers:{
                 "x-user-email": req.user.email,
