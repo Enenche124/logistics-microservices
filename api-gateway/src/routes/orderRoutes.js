@@ -1,13 +1,18 @@
 const express = require('express');
 const axios = require('axios');
+const verifyAuth = require('../../middlewares/verifyAuth');
+
+
 const router = express.Router();
 
-router.post('/orders', async (req, res) => {
+router.post('/orders', verifyAuth, async (req, res) => {
     try {
         const response = await axios.post('http://order-service:4002/v1/orders', req.body
             , {
              headers:{
-                Authorization: req.headers.authorization
+                "x-user-email": req.user.email,
+                "x-user-id": req.user.id
+                
             } 
         } );
         res.json(response.data);

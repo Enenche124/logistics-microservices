@@ -1,21 +1,23 @@
 const pool = require('../config/db');
+const OrderModel = require('../models/order.model');
 
 
 exports.createOrder = async (req, res) => {
     const { pickup, delivery } = req.body;
-    const userEmail = req.user.email;
+    const userEmail = req.headers['x-user-email'];
+
+    if (!userEmail) {
+        return res.status(401).json({ message: 'Unauthenticated request' });
+    }
 
     if (!pickup || !delivery) {
         return res.status(400).json({ message: 'Pickup and delivery locations are required' });
     }
     try {
-        const result = await pool.query(
-            'INSERT INTO orders (user_email, pickup, delivery) VALUES ($1, $2, $3) RETURNING *',
-            [userEmail, pickup, delivery]
-        );
+        const result = await OrderModel.createOrder(userEmail, pickup, delivery);
         return res.status(201).json({
             message: 'Order created successfully',
-            order: result.rows[0],
+            result,                                                                                                             
         });
     } catch (error) {
         console.error('createOrder error:', error);
